@@ -1,5 +1,7 @@
 //: Playground - noun: a place where people can play
+/*:
+ #  Sandbox
+ */
 
-import UIKit
+//import Foundation
 
-var str = "Hello, playground"

@@ -1,10 +1,16 @@
 //: [Previous](@previous)
 /*:
  # 関数型で考える (02)
+ 
+ - 関数は「値」であり構造体や数値、真偽値などと変わらないということです。
+ - この例における教訓は **慎重に型を選択すること** です
+ 
  */
 import Foundation
 
 typealias Distance = Double
+// MEMO: 「Position型をBool型に変換する関数」としてtypealias化
+typealias Region = (Position) -> Bool
 
 struct Position {
     var x: Double
@@ -34,40 +40,94 @@ struct Ship {
 }
 
 extension Ship {
+        func canSafelyEngageShip(
+            ship target: Ship,
+            friendly: Ship
+            ) -> Bool {
+            let rangeRegion = substract(
+                circle(radius: unsafeRange),
+                from: circle(radius: firingRange)
+            )
+            let firingRegion = shift(
+                rangeRegion,
+                by: position
+            )
+            let friendlyRegion = shift(
+                circle(radius: unsafeRange),
+                by: friendly.position
+            )
+            
+            // 射程範囲と僚艦の範囲の差分領域
+            let resultRegion = substract(
+                friendlyRegion,
+                from: firingRegion
+            )
+            return resultRegion(target.position)
+        }
+}
+
+extension Ship {
+    func circle(radius: Distance) -> Region {
+        return { point in
+            point.length <= radius
+        }
+    }
     
-    //    func canSafelyEngage(
-    //        ship target: Ship,
-    //        friendly: Ship
-    //    ) -> Bool {
-    //        let dx = target.position.x - position.x
-    //        let dy = target.position.y - position.y
-    //        let targetDistance = sqrt(dx * dx + dy * dy)
-    //        let friendlyDx = friendly.position.x - target.position.x
-    //        let friendlyDy = friendly.position.y - target.position.y
-    //        let friendlyDistance = sqrt(friendlyDx * friendlyDx + friendlyDy * friendlyDy)
-    //
-    //        return targetDistance <= firingRange
-    //            && targetDistance > unsafeRange
-    //            && friendlyDistance > unsafeRange
-    //    }
+    func circle2(
+        radius: Distance,
+        center: Position
+        ) -> Region {
+        return { point in
+            point.minus(center).length <= radius
+        }
+    }
     
-    /*:
-     ## 問題点
-     > 現時点のcanSafelyEngage(ship:friendly:)では、
-     > 戻り値を構成する真偽値の条件の組み合わせの中にその動作が組み込まれてしまっています。
-     */
+    // 領域変換器
+    func shift(
+        _ region: @escaping Region,
+        by offset: Position
+        ) -> Region {
+        return { point in
+            region(point.minus(offset))
+        }
+    }
     
-    func canSafelyEngageShip2(
-        ship target: Ship,
-        friendly: Ship
-        ) -> Bool {
-        let targetDistance = target.position.minus(position).length
-        let friendlyDistance = friendly.position.minus(target.position).length
-        return targetDistance <= firingRange
-            && targetDistance > unsafeRange
-            && friendlyDistance > unsafeRange
+    // 領域を反転させ、新たな領域を定義する
+    func invert(_ region: @escaping Region) -> Region {
+        return { point in
+            !region(point)
+        }
+    }
+    
+    // 2種の領域双方に存在するか
+    func intersect(
+        _ region: @escaping Region,
+        with other: @escaping Region
+        ) -> Region {
+        return { point in
+            region(point)  && other(point)
+        }
+    }
+    
+    // 2種の領域いずれかに存在するか
+    func union(
+        _ region: @escaping Region,
+        with other: @escaping Region
+        ) -> Region {
+        return { point in
+            region(point) || other(point)
+        }
+    }
+    
+    // 元の領域と、その領域から除去する領域の2つを引数に取り、新たな領域を定義
+    func substract(
+        _ region: @escaping Region,
+        from original: @escaping Region
+        ) -> Region {
+        return intersect(original, with: invert(region))
     }
 }
+
 
 //: [Next](@next)
 
