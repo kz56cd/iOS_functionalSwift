@@ -84,6 +84,12 @@ import Foundation
 
 // 04-01
 // ArrayのExtentionとしてmapを定義する
+/*:
+
+ > “我々はこの慣習に従い、ある特定の型に対して動作する関数はその型の拡張として定義することを勧めます。Xcodeのオートコンプリート機能が役立ち、不明瞭な名前を避けることができ、（たいていの場合）より明確に構造化されたコードを書けるという利点があります。”
+ 
+ */
+
 extension Array {
     func map<T>(_ transform: (Element) -> T) -> [T] {
         var result: [T] = []
