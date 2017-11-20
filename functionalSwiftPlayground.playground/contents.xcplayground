@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' display-mode='raw'>
+<playground version='6.0' target-platform='ios' display-mode='rendered'>
     <pages>
         <page name='Sandbox'/>
         <page name='Map、Filter、Reduce (01)'/>
         <page name='Map、Filter、Reduce (02)'/>
         <page name='Map、Filter、Reduce (03)'/>
         <page name='Map、Filter、Reduce (04)'/>
+        <page name='Map、Filter、Reduce (05)'/>
+        <page name='Map、Filter、Reduce (06)'/>
         <page name='関数型で考える (01)'/>
         <page name='関数型で考える (02)'/>
     </pages>
