@@ -69,21 +69,21 @@ extension Array {
         }
         return result
     }
-}
-
-func sumUsingReduce(integers: [Int]) -> Int {
-    return integers.reduce(0) {result, x in
+    
+    func sumUsingReduce(integers: [Int]) -> Int {
+        return integers.reduce(0) {result, x in
             result + x
         }
-}
-
-func productUsingReduce(integers: [Int]) -> Int {
-    // NOTE: sumUsingReduceのようなクロージャでなく、直接演算子を渡すこともできる
-    return integers.reduce(1, combine: *)
-}
-
-func concatUsingReduce(strings: [String]) -> String {
-    return strings.reduce("", combine: +)
+    }
+    
+    func productUsingReduce(integers: [Int]) -> Int {
+        // NOTE: sumUsingReduceのようなクロージャでなく、直接演算子を渡すこともできる
+        return integers.reduce(1, combine: *)
+    }
+    
+    func concatUsingReduce(strings: [String]) -> String {
+        return strings.reduce("", combine: +)
+    }
 }
 
 let intList = [1, 2, 3, 4]
@@ -91,7 +91,6 @@ let stringList = ["I", " dont ",  " care"]
 sumUsingReduce(integers: intList)
 productUsingReduce(integers: intList)
 concatUsingReduce(strings: stringList)
-
 
 //: [Next](@next)
 
